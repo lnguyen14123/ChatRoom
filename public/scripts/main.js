@@ -5,17 +5,21 @@ const msgSound = document.getElementById("msgSound");
 const joinSound = document.getElementById("joinSound"); 
 const leaveSound = document.getElementById("leaveSound"); 
 
+msgSound.volume = 0.2;
+joinSound.volume = 0.2;
+leaveSound.volume = 0.2;
 let previousMessageUser;
-
 
 String.prototype.replaceAll = function(str1, str2, ignore) 
 {
     return this.replace(new RegExp(str1.replace(/([\/\,\!\\\^\$\{\}\[\]\(\)\.\*\+\?\|\<\>\-\&])/g,"\\$&"),(ignore?"gi":"g")),(typeof(str2)=="string")?str2.replace(/\$/g,"$$$$"):str2);
 } 
 
-const username = location.href.split('?')[1].split('&')[0].split('=')[1].replaceAll('+', " ");
-const color = location.href.split('?')[1].split('&')[1].split('=')[1].replace('%23', '#');
-const room = location.href.split('?')[1].split('&')[2].split('=')[1].replace('+', ' ');
+
+
+let username = location.href.split('?')[1].split('&')[0].split('=')[1].replaceAll('+', " ");
+let color = location.href.split('?')[1].split('&')[1].split('=')[1].replace('%23', '#');
+let room = location.href.split('?')[1].split('&')[2].split('=')[1].replace('+', ' ');
 
 //Join chatroom
 socket.emit('joinRoom', {username, room, color});
@@ -50,12 +54,10 @@ socket.on('message', (msg)=>{
   }
 });
 
-socket.on('music', (msg)=>{
-
-  playSound(msg.msg);
+socket.on('changeNick', (arg)=>{
+  console.log(arg);
+  username = arg;
 });
-
-
 
 
 function createMessage(msg){
