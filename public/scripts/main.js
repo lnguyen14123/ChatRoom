@@ -3,6 +3,8 @@ const chatForm = document.getElementById('chat-form');
 const messageContainer = document.getElementById('chat-messages');
 const audioPlayer = document.getElementById("myAudio"); 
 
+let previousMessageUser;
+
 function playAudio() { 
   audioPlayer.play(); 
 } 
@@ -26,20 +28,27 @@ socket.on('message', (msg)=>{
   if(msg.username!=username){
     playAudio();
   }
-
   if(msg.msg.length>300){
     msg.msg = "your message was so long i will not read it - Lord of Datkord"
   }
   createMessage(msg);
   messageContainer.scrollTop = messageContainer.scrollHeight;
+  previousMessageUser = msg.username;
 });
 
 function createMessage(msg){
   let newMessage = document.createElement('div');
   newMessage.classList.add('message');
   console.log(msg.color);
-  newMessage.innerHTML = 
-  `<p style="color: ${msg.color}" class="meta">${msg.username} - <span>${msg.time}</span> <span style="display:block"class="text">${msg.msg}</span></p>`
+
+  if(previousMessageUser==msg.username){
+    newMessage.innerHTML = 
+    `<p class="meta"><span></span><span style="display:block"class="message-display">${msg.msg}</span></p>`  
+  }else{
+    newMessage.innerHTML = 
+    `<p style="color: ${msg.color}; font-weight:bold;" class="meta">${msg.username} <span class="time-display">${msg.time}</span> <span style="display:block"class="message-display">${msg.msg}</span></p>`  
+  }
+
   messageContainer.appendChild(newMessage);
 }
 

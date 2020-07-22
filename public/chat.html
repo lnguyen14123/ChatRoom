@@ -3,29 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+  <link rel="stylesheet" href="./styles/style.css">
   <title>Datkord</title>
 </head>
-<body style="margin-left: 200px; color: white; background-color: #23272a; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+<body>
   <audio id="myAudio">
     <source src="discord-notification.mp3" type="audio/mpeg">
     Your browser does not support the audio element.
   </audio>
+  
+  <header class="chat-header">
+    <h1>Datkord</h1>
+    <a href="index.html" class="btn">Leave Room</a>
+  </header>
 
-  <div class="chat-container" >
-    <header class="chat-header">
-      <h1>Datkord</h1>
-      <a href="index.html" class="btn">Leave Room</a>
-    </header>
+  <div id="chat-container" >
     <main class="chat-main">
-      <div class="chat-sidebar">
+      <!-- <div class="chat-sidebar">
         <h3><i class="fas fa-comments"></i> Room Name:</h3>
         <h2 id="room-name">JavaScript</h2>
         <h3><i class="fas fa-users"></i> Users</h3>
         <ul id="users">
         </ul>
-      </div>
-      <div id="chat-messages" style="max-height: 300px; overflow-y: scroll; margin-right: 50px;">
+      </div> -->
+      <div id="chat-messages">
 					<div class="message">
           </div>
       </div>
@@ -35,11 +36,10 @@
         <input
           id="msg"
           type="text"
-          placeholder="Enter Message"
-          required
+          placeholder="Message"
+          required  
           autocomplete="off"
         />
-        <button class="btn" id="send-btn"><i class="fas fa-paper-plane"></i> Send</button>
       </form>
     </div>
   </div>
