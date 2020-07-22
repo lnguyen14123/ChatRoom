@@ -16,29 +16,25 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //Run when a client connects
 io.on('connection', socket=>{
-  socket.on('joinRoom', ({username, room})=>{
+  socket.on('joinRoom', ({username, room, color})=>{
 
-    let r = Math.floor(Math.random()*155)+60;
-    let g = Math.floor(Math.random()*155)+60;
-    let b = Math.floor(Math.random()*155)+60;
-
-    userJoin(socket.id, username, room, rgbToHex(r,g,b));
+    userJoin(socket.id, username, room, color);
 
     //Welcome connecting user 
     socket.emit('message', formatMsg('Lord of DatKord', "Welcome to Datkord", "#d6a400"));
 
     //Broadcast when user connects (broadcasts to everyone except user that is connecting)
-    socket.broadcast.emit('message', formatMsg('Lord of DatKord', username + ' has joined the chat', "#d6a400"));
+    socket.broadcast.emit('message', formatMsg('Lord of DatKord', username + ' has joined the chat', "#d6a400", "join"));
 
     //When user sends message
     socket.on('chatMessage', (msg)=>{
       const currentUser = getCurrentUser(socket.id);
-      io.emit('message', formatMsg(currentUser.username, msg, currentUser.color));
+      io.emit('message', formatMsg(currentUser.username, msg, currentUser.color, "msg"));
     });
 
     //When user dsc
     socket.on('disconnect', ()=>{
-      io.emit('message', formatMsg('Lord of DatKord', username + ' has left the chat', "#d6a400"));
+      io.emit('message', formatMsg('Lord of DatKord', username + ' has left the chat', "#d6a400", "leave"));
     });
     
   });

@@ -18,7 +18,6 @@ body{
   margin-right: 50px;
   background-color:  #373c40;
   padding-left: 5em;
-  padding-right: 5em;
   min-height: 380px;
 }
 .time-display{
@@ -41,7 +40,7 @@ input{
   color: white;
   min-height: 35px;
   padding-left: 20px;
-  border-radius: 10px;
+  border-radius: 7px;
 }
 
 #msg{
@@ -64,7 +63,13 @@ input{
 
 #chat-container{
   margin-top: 20px;
-  border: 10px solid white;
   background-color:  #373c40;
+  border-radius: 10px;
+  margin-right: 5em;
 
+}
+
+#color-picker{
+  padding: 5px;
+  margin-left: 50px;
 }

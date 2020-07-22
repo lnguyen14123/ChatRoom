@@ -1,20 +1,24 @@
 const socket = io();
 const chatForm = document.getElementById('chat-form');
 const messageContainer = document.getElementById('chat-messages');
-const audioPlayer = document.getElementById("myAudio"); 
+const msgSound = document.getElementById("msgSound"); 
+const joinSound = document.getElementById("joinSound"); 
+const leaveSound = document.getElementById("leaveSound"); 
 
 let previousMessageUser;
 
-function playAudio() { 
-  audioPlayer.play(); 
+
+String.prototype.replaceAll = function(str1, str2, ignore) 
+{
+    return this.replace(new RegExp(str1.replace(/([\/\,\!\\\^\$\{\}\[\]\(\)\.\*\+\?\|\<\>\-\&])/g,"\\$&"),(ignore?"gi":"g")),(typeof(str2)=="string")?str2.replace(/\$/g,"$$$$"):str2);
 } 
 
-//get Username and room from url
-const username = location.href.split('?')[1].split('&')[0].split('=')[1].replace('+', '');
-const room = location.href.split('?')[1].split('&')[1].split('=')[1].replace('+', '');
+const username = location.href.split('?')[1].split('&')[0].split('=')[1].replaceAll('+', " ");
+const color = location.href.split('?')[1].split('&')[1].split('=')[1].replace('%23', '#');
+const room = location.href.split('?')[1].split('&')[2].split('=')[1].replace('+', ' ');
 
 //Join chatroom
-socket.emit('joinRoom', {username, room});
+socket.emit('joinRoom', {username, room, color});
 
 chatForm.addEventListener('submit', (e)=>{
   //prevent the form from submiting text to a file
@@ -26,7 +30,15 @@ chatForm.addEventListener('submit', (e)=>{
 
 socket.on('message', (msg)=>{
   if(msg.username!=username){
-    playAudio();
+    if(msg.msgType == "join"){
+      joinSound.play();
+    }else if(msg.msgType== "leave"){
+      leaveSound.play();
+    }else if(msg.msgType == 'msg'){
+      msgSound.play();
+    }
+  
+  
   }
   if(msg.msg.length>300){
     msg.msg = "your message was so long i will not read it - Lord of Datkord"
@@ -39,7 +51,6 @@ socket.on('message', (msg)=>{
 function createMessage(msg){
   let newMessage = document.createElement('div');
   newMessage.classList.add('message');
-  console.log(msg.color);
 
   if(previousMessageUser==msg.username){
     newMessage.innerHTML = 
@@ -51,4 +62,6 @@ function createMessage(msg){
 
   messageContainer.appendChild(newMessage);
 }
+
+
 
