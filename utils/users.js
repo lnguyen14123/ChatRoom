@@ -9,4 +9,8 @@ function getCurrentUser(id){
   return users.find((user)=>user.id === id);
 }
 
-module.exports = {userJoin, getCurrentUser};
+function getCurrentUserByName(name){
+  return users.find((user)=>user.name === name);
+}
+
+module.exports = {userJoin, getCurrentUser, getCurrentUserByName, users};

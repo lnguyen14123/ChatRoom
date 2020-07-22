@@ -5,7 +5,7 @@ const http = require('http');
 const socketio = require('socket.io');
 const moment = require('moment');
 const formatMsg = require('./utils/messages');
-const {userJoin, getCurrentUser} = require('./utils/users');
+const {userJoin, getCurrentUser, getCurrentUserByName, users} = require('./utils/users');
 
 const app = express();
 const server = http.createServer(app);
@@ -37,6 +37,24 @@ io.on('connection', socket=>{
       io.emit('message', formatMsg('Lord of DatKord', username + ' has left the chat', "#d6a400", "leave"));
     });
     
+    socket.on('command', (msgObject)=>{
+      let cmd = msgObject.msg.toLowerCase().split(' ')[0];
+      let arg = msgObject.msg.toLowerCase().split(' ')[1];
+      switch(cmd){
+        case '!hi':
+          socket.emit('message', formatMsg('Lord of DatKord', "Hi " + msgObject.username + "!", "#d6a400", "msg")); 
+          break;
+                
+        // case '!play':
+        //   if(arg!=undefined){
+        //     socket.emit('music', formatMsg('Lord of DatKord', arg, "#d6a400", "msg")); 
+        //   }
+        //   break;
+
+        default: 
+        socket.emit('message', formatMsg('Lord of DatKord', 'Error: no such command: ' + cmd, "#d6a400", "msg")); 
+      }
+    });
   });
 });
 

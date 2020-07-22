@@ -37,16 +37,26 @@ socket.on('message', (msg)=>{
     }else if(msg.msgType == 'msg'){
       msgSound.play();
     }
-  
-  
   }
-  if(msg.msg.length>300){
+  if(msg.msg.length>600){
     msg.msg = "your message was so long i will not read it - Lord of Datkord"
   }
   createMessage(msg);
   messageContainer.scrollTop = messageContainer.scrollHeight;
   previousMessageUser = msg.username;
+
+  if(msg.msg[0]=='!'){
+    socket.emit('command', msg);
+  }
 });
+
+socket.on('music', (msg)=>{
+
+  playSound(msg.msg);
+});
+
+
+
 
 function createMessage(msg){
   let newMessage = document.createElement('div');
@@ -57,7 +67,7 @@ function createMessage(msg){
     `<p class="meta"><span></span><span style="display:block"class="message-display">${msg.msg}</span></p>`  
   }else{
     newMessage.innerHTML = 
-    `<p style="color: ${msg.color}; font-weight:bold;" class="meta">${msg.username} <span class="time-display">${msg.time}</span> <span style="display:block"class="message-display">${msg.msg}</span></p>`  
+    `<p style="color: ${msg.color}; font-weight:bold;" class="meta">${msg.username} <span class="time-display">${msg.time}</span> <span style="display:block" class="message-display">${msg.msg}</span></p>`  
   }
 
   messageContainer.appendChild(newMessage);
@@ -65,3 +75,7 @@ function createMessage(msg){
 
 
 
+function playSound(url) {
+  var a = new Audio(url);
+  a.play();
+}

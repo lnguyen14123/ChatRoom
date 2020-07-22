@@ -3,22 +3,48 @@
   opacity: 1; 
 }
 
+/* width */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  margin-top: 10px;
+  background: #313233;
+  border-radius: 20px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #1a1a1a;
+  border-radius: 20px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #1a1a1a;
+}
+
 body{
-  margin-left: 200px;
+  padding: 0px;
+  margin: 0px;
+  margin-top: -30px;
   color: white;
   background-color: #23272a;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  height:100%;
 }
 /*       <div id="chat-messages" style="max-height: 300px; overflow-y: scroll; margin-right: 50px;">
  */
 #chat-messages{
   margin-top: 20px;
-  max-height: 380px;
   overflow-y: scroll;
   margin-right: 50px;
   background-color:  #373c40;
   padding-left: 5em;
-  min-height: 380px;
+  max-height: 470px;
+  min-height: 470px;
 }
 .time-display{
   color: #848687;
@@ -28,6 +54,7 @@ body{
 }
 
 .message-display{
+
   margin-top: 7px;
   margin-left: 10px;
   color: white;
@@ -44,7 +71,7 @@ input{
 }
 
 #msg{
-  width: 950px;
+  width: 90%;
   margin-right: 50px;
   font-size: 15px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -56,16 +83,24 @@ input{
   border-bottom-style: hidden;
 }
 
-.chat-form-container{
-  text-align: center;
-  padding-bottom: 30px;
-}
 
-#chat-container{
+#chat-container {
   margin-top: 20px;
   background-color:  #373c40;
   border-radius: 10px;
   margin-right: 5em;
+  margin-left: 100px;
+  min-height: 530px;
+  max-height: 530px;
+}
+.join-container{
+  padding:30px;
+  padding-top: 1px;
+  margin-top: 70px;
+  background-color:  #373c40;
+  border-radius: 10px;
+  margin-right: 5em;
+  margin-left: 100px;
 
 }
 
@@ -73,3 +108,41 @@ input{
   padding: 5px;
   margin-left: 50px;
 }
+
+button{
+  background-color: #7289da;
+  color: white;
+  font-size: 15px;
+  font-weight: 900;
+  border-radius: 10px;
+  padding: 10px;
+  outline: none;
+  border-top-style: hidden;
+  border-right-style: hidden;
+  border-left-style: hidden;
+  border-bottom-style: hidden;
+  cursor: pointer;
+}
+
+.chat-header{
+  padding: 20px;
+  height: 55px;
+  margin: 0px;
+  background-color: #70e6a7;
+}
+
+#leave-form{
+  display: inline-block;
+  margin: 30px;
+  margin-top: 20px;
+  float:right;
+}
+
+#title{
+  display: inline-block;
+}
+
+#chat-form-container{
+  text-align: center;
+}
+
