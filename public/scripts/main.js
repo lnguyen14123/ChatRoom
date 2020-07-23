@@ -54,12 +54,6 @@ socket.on('message', (msg)=>{
   }
 });
 
-socket.on('changeNick', (arg)=>{
-  console.log(arg);
-  username = arg;
-});
-
-
 function createMessage(msg){
   let newMessage = document.createElement('div');
   newMessage.classList.add('message');

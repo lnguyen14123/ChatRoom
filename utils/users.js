@@ -13,4 +13,17 @@ function getCurrentUserByName(name){
   return users.find((user)=>user.name === name);
 }
 
-module.exports = {userJoin, getCurrentUser, getCurrentUserByName, users};
+function userLeave(id){
+  let index = users.findIndex(user=>user.id===id);
+  if(index!=-1){
+    return users.splice(index, 1);
+  }
+}
+
+function changeNick(id, newName){
+  users.find((user)=>user.id === id).username = newName;
+}
+
+
+
+module.exports = {userJoin, getCurrentUser, getCurrentUserByName, users, userLeave, changeNick};

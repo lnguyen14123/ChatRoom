@@ -1,11 +1,11 @@
-
 const express = require('express');
 const path = require('path');
 const http = require('http');
 const socketio = require('socket.io');
 const moment = require('moment');
 const formatMsg = require('./utils/messages');
-const {userJoin, getCurrentUser, getCurrentUserByName, users} = require('./utils/users');
+const {userJoin, getCurrentUser, getCurrentUserByName, users, userLeave, changeNick} = require('./utils/users');
+const { start } = require('repl');
 
 const app = express();
 const server = http.createServer(app);
@@ -18,8 +18,6 @@ String.prototype.replaceAll = function(str1, str2, ignore)
 {
     return this.replace(new RegExp(str1.replace(/([\/\,\!\\\^\$\{\}\[\]\(\)\.\*\+\?\|\<\>\-\&])/g,"\\$&"),(ignore?"gi":"g")),(typeof(str2)=="string")?str2.replace(/\$/g,"$$$$"):str2);
 } 
-
-
 
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -43,7 +41,10 @@ io.on('connection', socket=>{
 
     //When user dsc
     socket.on('disconnect', ()=>{
-      io.emit('message', formatMsg('Lord of DatKord', name + ' has left the chat', "#d6a400", "leave"));
+      const user = userLeave(socket.id);
+      if(user){ 
+        io.emit('message', formatMsg('Lord of DatKord', user.username + ' has left the chat', "#d6a400", "leave"));
+      }
     });
     
     socket.on('command', (msgObject)=>{
@@ -59,26 +60,22 @@ io.on('connection', socket=>{
           socket.emit('message', formatMsg('Lord of DatKord', "Hi " + msgObject.username + "!", "#d6a400", "msg")); 
           break;
                 
-        case '!nick':
-          if(arg!=undefined){
-            if(arg!='Lord of DatKord'){
-              currentUser.username = arg;
-              username=arg;
-              socket.emit('changeNick', arg);
-              socket.emit('message', formatMsg('Lord of DatKord', 'changing nickname to ' + arg + "...", "#d6a400", "msg"));   
-            } else{
-              socket.emit('message', formatMsg('Lord of DatKord', "Hey! That's my name!", "#d6a400", "msg"));   
-            }
-          }
-          break;
-
         case '!shrug':
-          io.emit('message', formatMsg(currentUser.username, "¯\\_(ツ)_/¯", currentUser.color, "msg"));
+          socket.emit('message', formatMsg(currentUser.username, "¯\\_(ツ)_/¯", currentUser.color, "msg"));
           break;
         
-        // case '!member-count':
-        //   io.emit('message', formatMsg('Lord of DatKord', users.length, "#d6a400", "msg"));
-        //   break;
+        case '!users':
+          let str = "The current users are: <br></br>";
+
+          users.forEach((user)=>{
+            str+=user.username; 
+            str+="<br></br>";
+          });
+
+          socket.emit('message', formatMsg('Lord of DatKord', str, "#d6a400", "msg"));
+          break;
+
+
         default: 
           socket.emit('message', formatMsg('Lord of DatKord', 'Error: no such command: ' + cmd, "#d6a400", "msg")); 
       }
@@ -93,7 +90,5 @@ function componentToHex(c) {
 function rgbToHex(r, g, b) {
   return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
 }
-
-
 
 server.listen(PORT, ()=>console.log('ChatRoom server running at port: ' + PORT));
